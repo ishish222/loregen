@@ -1,0 +1,27 @@
+name: Frontend - ecs rotate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  rotate-ecs-service:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.ROLE_TO_ASSUME }}
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: eu-central-1
+
+      - name: Force new ECS deployment
+        run: |
+          aws ecs update-service \
+            --cluster loregen_front_dashboard \
+            --service loregen_front_dashboard_service \
+            --force-new-deployment \
+            --region eu-central-1
