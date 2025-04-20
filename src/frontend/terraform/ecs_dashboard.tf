@@ -324,13 +324,13 @@ resource "aws_iam_role_policy" "ecs_execution_policy_for_loregen_front_dashboard
         Resource = [
           data.aws_secretsmanager_secret.openai_api_key.arn, 
           data.aws_secretsmanager_secret.openrouter_api_key.arn,
-          data.aws_secretsmanager_secret.anthropic_api_key.arn,
-          data.aws_secretsmanager_secret.mistral_api_key.arn,
-          data.aws_secretsmanager_secret.google_api_key.arn,
-          data.aws_secretsmanager_secret.groq_api_key.arn,
-          data.aws_secretsmanager_secret.deepseek_api_key.arn,
-          data.aws_secretsmanager_secret.xai_api_key.arn,
-          data.aws_secretsmanager_secret.langsmith_api_key.arn,
+          # data.aws_secretsmanager_secret.anthropic_api_key.arn,
+          # data.aws_secretsmanager_secret.mistral_api_key.arn,
+          # data.aws_secretsmanager_secret.google_api_key.arn,
+          # data.aws_secretsmanager_secret.groq_api_key.arn,
+          # data.aws_secretsmanager_secret.deepseek_api_key.arn,
+          # data.aws_secretsmanager_secret.xai_api_key.arn,
+          # data.aws_secretsmanager_secret.langsmith_api_key.arn,
           ]
       },
     ]
