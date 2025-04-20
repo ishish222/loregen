@@ -32,34 +32,34 @@ resource "aws_ecs_task_definition" "loregen_front_dashboard-task" {
       name      = "OPENROUTER_API_KEY"
       valueFrom = data.aws_secretsmanager_secret.openrouter_api_key.arn
     },
-    {
-      name      = "ANTHROPIC_API_KEY"
-      valueFrom = data.aws_secretsmanager_secret.anthropic_api_key.arn
-    },
-    {
-      name      = "MISTRAL_API_KEY"
-      valueFrom = data.aws_secretsmanager_secret.mistral_api_key.arn
-    },
-    {
-      name      = "GOOGLE_API_KEY"
-      valueFrom = data.aws_secretsmanager_secret.google_api_key.arn
-    },
-    {
-      name      = "GROQ_API_KEY"
-      valueFrom = data.aws_secretsmanager_secret.groq_api_key.arn
-    },
-    {
-      name      = "DEEPSEEK_API_KEY"
-      valueFrom = data.aws_secretsmanager_secret.deepseek_api_key.arn
-    },
-    {
-      name      = "XAI_API_KEY"
-      valueFrom = data.aws_secretsmanager_secret.xai_api_key.arn
-    },
-    {
-      name      = "LANGCHAIN_API_KEY"
-      valueFrom = data.aws_secretsmanager_secret.langsmith_api_key.arn
-    },
+    # {
+    #   name      = "ANTHROPIC_API_KEY"
+    #   valueFrom = data.aws_secretsmanager_secret.anthropic_api_key.arn
+    # },
+    # {
+    #   name      = "MISTRAL_API_KEY"
+    #   valueFrom = data.aws_secretsmanager_secret.mistral_api_key.arn
+    # },
+    # {
+    #   name      = "GOOGLE_API_KEY"
+    #   valueFrom = data.aws_secretsmanager_secret.google_api_key.arn
+    # },
+    # {
+    #   name      = "GROQ_API_KEY"
+    #   valueFrom = data.aws_secretsmanager_secret.groq_api_key.arn
+    # },
+    # {
+    #   name      = "DEEPSEEK_API_KEY"
+    #   valueFrom = data.aws_secretsmanager_secret.deepseek_api_key.arn
+    # },
+    # {
+    #   name      = "XAI_API_KEY"
+    #   valueFrom = data.aws_secretsmanager_secret.xai_api_key.arn
+    # },
+    # {
+    #   name      = "LANGCHAIN_API_KEY"
+    #   valueFrom = data.aws_secretsmanager_secret.langsmith_api_key.arn
+    # },
     ],
     environment = [{
       name  = "SCRIPT_NAME"
