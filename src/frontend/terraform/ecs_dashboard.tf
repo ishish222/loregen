@@ -121,10 +121,10 @@ resource "aws_ecs_task_definition" "loregen_front_dashboard-task" {
       name = "COGNITO_DOMAIN_REGION"
       value = var.cognito_domain_region
     },
-    {
-      name = "DB_HOST"
-      value = aws_rds_cluster.loregen_front_aurora_cluster.endpoint
-    },
+    # {
+    #   name = "DB_HOST"
+    #   value = aws_rds_cluster.loregen_front_aurora_cluster.endpoint
+    # },
     {
       name = "DB_PORT"
       value = var.db_port
