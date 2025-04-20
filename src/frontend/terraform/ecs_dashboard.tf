@@ -137,10 +137,10 @@ resource "aws_ecs_task_definition" "loregen_front_dashboard-task" {
       name = "DB_USERNAME"
       value = var.db_username
     },
-    {
-      name = "DB_SECRET_ARN"
-      value = "arn:aws:secretsmanager:${var.aws_region}:${var.aws_account}:secret:/loregen_front_db/password"
-    },
+    # {
+    #   name = "DB_SECRET_ARN"
+    #   value = "arn:aws:secretsmanager:${var.aws_region}:${var.aws_account}:secret:/loregen_front_db/password"
+    # },
     ],
     logConfiguration = {
       logDriver = "awslogs"
