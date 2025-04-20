@@ -3,7 +3,7 @@
 resource "aws_security_group" "alb_sg" {
   name        = "loregen_front_dashboard_public_alb_sg"
   description = "Allow public access to HTTP and HTTPS on port 80 and 443"
-  vpc_id      = aws_vpc.navigator_vpc.id
+  vpc_id      = aws_vpc.loregen_front_vpc.id
 
   ingress {
     description = "HTTP"
@@ -50,7 +50,7 @@ resource "aws_lb_target_group" "loregen_front_dashboard_tg" {
   name     = "navi-dashboard-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.navigator_vpc.id
+  vpc_id   = aws_vpc.loregen_front_vpc.id
   target_type = "ip"
 
 health_check {

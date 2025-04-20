@@ -139,7 +139,7 @@ resource "aws_ecs_task_definition" "loregen_front_dashboard-task" {
     },
     {
       name = "DB_SECRET_ARN"
-      value = "arn:aws:secretsmanager:${var.aws_region}:${var.aws_account}:secret:/navigator_db/password"
+      value = "arn:aws:secretsmanager:${var.aws_region}:${var.aws_account}:secret:/loregen_front_db/password"
     },
     ],
     logConfiguration = {
@@ -343,7 +343,7 @@ resource "aws_iam_role_policy" "ecs_execution_policy_for_loregen_front_dashboard
 resource "aws_security_group" "loregen_front_dashboard-service-sg" {
   name        = "loregen_front_dashboard_public_http_access_1"
   description = "Allow public access to HTTP on port 80 and 8000"
-  vpc_id      = aws_vpc.navigator_vpc.id
+  vpc_id      = aws_vpc.loregen_front_vpc.id
 
   ingress {
     description = "HTTP"
