@@ -26,10 +26,6 @@ jobs:
 
       - uses: hashicorp/setup-terraform@v2
 
-      - run: |
-          make all
-        working-directory: .
-
       - run: terraform init -backend-config=backend-dev.conf -reconfigure
         working-directory: src/frontend/terraform
 
