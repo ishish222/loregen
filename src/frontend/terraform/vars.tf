@@ -71,7 +71,7 @@ variable "app_port" {
 }
 
 variable "dashboard_image" {
-    description = "The Docker image to use for the Navigator's dashboard"
+    description = "The Docker image to use for the Loregen's dashboard"
     type        = string
     default     = "242532629527.dkr.ecr.eu-central-1.amazonaws.com/loregen_front/dashboard:latest"
 }
@@ -109,7 +109,7 @@ variable "cognito_domain" {
 variable "cognito_domain_client_id" {
     description = "The client ID for the Cognito user pool"
     type        = string
-    default     = "hhurmd7rfdgjpeq3lbq0v0tas"
+    default     = "3stul40m2rgf1rivcq5lc2lfd2"
 }
 
 variable "cognito_domain_redirect_uri_login" {
