@@ -1,7 +1,7 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "agent": "./src/backend/sample/graph.py:graph"
+    "agent": "./src/loregen/backend/sample/graph.py:graph"
   },
   "env": ".env"
 }
