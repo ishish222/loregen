@@ -4,6 +4,6 @@ This module defines a custom reasoning and action agent graph.
 It invokes tools in a simple loop.
 """
 
-from backend.sample.graph import graph
+from loregen.backend.sample.graph import graph
 
 __all__ = ["graph"]

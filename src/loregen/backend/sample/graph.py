@@ -4,10 +4,10 @@ from langchain_core.runnables import RunnableConfig
 from typing import Dict, List, Literal, cast
 from langchain_core.messages import AIMessage, HumanMessage
 
-from backend.sample.state import InputState, State
-from backend.sample.configuration import Configuration
-from backend.sample.tools import TOOLS
-from backend.sample.utils import load_chat_model
+from loregen.backend.sample.state import InputState, State
+from loregen.backend.sample.configuration import Configuration
+from loregen.backend.sample.tools import TOOLS
+from loregen.backend.sample.utils import load_chat_model
 
 
 async def system(
