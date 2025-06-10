@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, fields
-from loregen.backend.sample.prompts import prompts
+from loregen.backend.sample.prompts import SYSTEM_PROMPT, REASONING_PROMPT
 from typing import Annotated, Optional
 
 from langchain_core.runnables import RunnableConfig, ensure_config
@@ -12,7 +12,7 @@ class Configuration:
     """Configuration for the sample agent"""
 
     system_prompt: str = field(
-        default=prompts.SYSTEM_PROMPT,
+        default=SYSTEM_PROMPT,
         metadata={
             "description": "The system prompt to use for the agent's interactions. "
             "This should be a short description of the agent's role and capabilities."
