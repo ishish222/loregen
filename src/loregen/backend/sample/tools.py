@@ -17,4 +17,4 @@ async def append_general_history(
 
     return "success"
 
-TOOLS = List[Callable[..., Any]] = [append_general_history]
+TOOLS: List[Callable[..., Any]] = [append_general_history]
