@@ -4,10 +4,10 @@ from langchain_core.runnables import RunnableConfig
 from typing import Dict, List, Literal, cast
 from langchain_core.messages import AIMessage, HumanMessage
 
-from sample.state import InputState, State
-from sample.configuration import Configuration
-from sample.tools import TOOLS
-from sample.utils import load_chat_model
+from backend.sample.state import InputState, State
+from backend.sample.configuration import Configuration
+from backend.sample.tools import TOOLS
+from backend.sample.utils import load_chat_model
 
 
 async def system(
