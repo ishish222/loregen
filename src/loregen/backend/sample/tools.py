@@ -1,12 +1,13 @@
 from langgraph.prebuilt import InjectedState
 from typing import Annotated
 from typing import Any, Callable, List
+from loregen.backend.sample.state import State
 
 
 async def append_general_history(
     epoch: str,
     description: str,
-    state: Annotated[dict, InjectedState],
+    state: Annotated[State, InjectedState],
 ) -> str:
     """
     Append a general history to the state.
@@ -14,7 +15,7 @@ async def append_general_history(
         epoch: The epoch of the history.
         description: The description of the history.
     """
-    state["history"].append({
+    state.history.append({
         "epoch": epoch,
         "description": description,
     })
