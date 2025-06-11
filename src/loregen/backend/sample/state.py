@@ -10,6 +10,7 @@ from langgraph.managed import IsLastStep
 @dataclass
 class InputState:
     conditions: str = field(default="")
+    number_of_epochs: int = field(default=10)
     messages: Annotated[Sequence[AnyMessage], add_messages] = field(
         default_factory=list
     )
