@@ -17,8 +17,8 @@ async def system(
 
     configuration = Configuration.from_runnable_config(config)
 
-    conditions = state['conditions']
-    number_of_epochs = state['number_of_epochs']
+    conditions = state.conditions
+    number_of_epochs = state.number_of_epochs
 
     system_message = configuration.system_prompt.format(
         conditions=conditions,
@@ -41,8 +41,8 @@ async def reasoning(
 
     reasoning_message = "Please add another epoch to the world."
 
-    state['messages'].append(HumanMessage(content=reasoning_message))
-    messages = state['messages']
+    state.messages.append(HumanMessage(content=reasoning_message))
+    messages = state.messages
 
     response = cast(
         AIMessage,
@@ -51,7 +51,7 @@ async def reasoning(
         ),
     )
 
-    state['messages'].append(response)
+    state.messages.append(response)
 
     # Handle the case when it's the last step and the model still wants to use a tool
     if state.is_last_step and response.tool_calls:
