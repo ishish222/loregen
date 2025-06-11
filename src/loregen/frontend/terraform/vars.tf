@@ -172,3 +172,9 @@ variable "restore_from_snapshot" {
   type        = bool
   default     = false
 }
+
+variable "endpoint_history" {
+  description = "The endpoint for the history"
+  type        = string
+  default     = "https://loregen-46c5474caeb95711b5bc7ddbe399f82d.us.langgraph.app"
+}

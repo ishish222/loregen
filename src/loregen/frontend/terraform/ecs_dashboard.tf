@@ -137,6 +137,14 @@ resource "aws_ecs_task_definition" "loregen_front_dashboard-task" {
       name = "DB_USERNAME"
       value = var.db_username
     },
+    {
+      name = "ENDPOINT_HISTORY"
+      value = var.endpoint_history
+    },
+    {
+      name = "LANGCHAIN_API_KEY"
+      value = data.aws_secretsmanager_secret.langchain_api_key.arn
+    },
     # {
     #   name = "DB_SECRET_ARN"
     #   value = "arn:aws:secretsmanager:${var.aws_region}:${var.aws_account}:secret:/loregen_front_db/password"
@@ -324,6 +332,7 @@ resource "aws_iam_role_policy" "ecs_execution_policy_for_loregen_front_dashboard
         Resource = [
           data.aws_secretsmanager_secret.openai_api_key.arn, 
           data.aws_secretsmanager_secret.openrouter_api_key.arn,
+          data.aws_secretsmanager_secret.langchain_api_key.arn,
           # data.aws_secretsmanager_secret.anthropic_api_key.arn,
           # data.aws_secretsmanager_secret.mistral_api_key.arn,
           # data.aws_secretsmanager_secret.google_api_key.arn,
