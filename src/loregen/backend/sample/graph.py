@@ -66,6 +66,7 @@ async def reasoning(
 
     return {
         'messages': [response],
+        'history': state.history,
     }
 
 builder = StateGraph(State, input=InputState, config_schema=Configuration)
