@@ -17,12 +17,13 @@ async def system(
 
     configuration = Configuration.from_runnable_config(config)
 
-    conditions = state.conditions
+    final_conditions = state.final_conditions
     number_of_epochs = state.number_of_epochs
-
+    world_history = state.world_history
     system_message = configuration.system_prompt.format(
-        conditions=conditions,
-        number_of_epochs=number_of_epochs
+        final_conditions=final_conditions,
+        number_of_epochs=number_of_epochs,
+        world_history=world_history
     )
 
     return {
