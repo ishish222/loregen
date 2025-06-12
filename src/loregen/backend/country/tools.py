@@ -12,8 +12,8 @@ async def append_country_history(
     """
     Append a country history to the state.
     Arguments:
-        epoch: The epoch of the history.
-        description: The description of the history.
+        epoch: The epoch of the country's history (string).
+        description: The description of the country's history (string).
     """
     state.history.append({
         "epoch": epoch,
