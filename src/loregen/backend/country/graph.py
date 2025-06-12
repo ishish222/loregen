@@ -18,11 +18,9 @@ async def system(
     configuration = Configuration.from_runnable_config(config)
 
     final_conditions = state.final_conditions
-    country_history = state.country_history
     world_history = state.world_history
     system_message = configuration.system_prompt.format(
         final_conditions=final_conditions,
-        country_history=country_history,
         world_history=world_history
     )
 
@@ -116,4 +114,4 @@ graph = builder.compile(
     interrupt_before=[],  # Add node names here to update state before they're called
     interrupt_after=[],  # Add node names here to update state after they're called
 )
-graph.name = "Generate City Agent"  # This customizes the name in LangSmith
+graph.name = "Generate Country Agent"  # This customizes the name in LangSmith

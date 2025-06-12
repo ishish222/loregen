@@ -2,7 +2,10 @@
   "dependencies": ["."],
   "graphs": {
     "world": "./src/loregen/backend/world/graph.py:graph",
-    "city": "./src/loregen/backend/city/graph.py:graph"
+    "city": "./src/loregen/backend/city/graph.py:graph",
+    "country": "./src/loregen/backend/country/graph.py:graph",
+    "family": "./src/loregen/backend/family/graph.py:graph",
+    "character": "./src/loregen/backend/character/graph.py:graph"
   },
   "env": ".env"
 }

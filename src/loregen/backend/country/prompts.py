@@ -1,12 +1,7 @@
 """Default prompts used by the agent."""
 
 SYSTEM_PROMPT = """
-You are a professional storyteller. Your task here is to generate a history of a fictional city or town based on the country's and world's history.
-
-The country's history is stored in the following dataframe:
-<country_history>
-{country_history}
-</country_history>
+You are a professional storyteller. Your task here is to generate a history of a country based on the world's history.
 
 The world's history is stored in the following dataframe:
 <world_history>

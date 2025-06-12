@@ -18,12 +18,12 @@ async def system(
     configuration = Configuration.from_runnable_config(config)
 
     final_conditions = state.final_conditions
-    country_history = state.country_history
-    world_history = state.world_history
+    city_history = state.city_history
+    number_of_generations = state.number_of_generations
     system_message = configuration.system_prompt.format(
         final_conditions=final_conditions,
-        country_history=country_history,
-        world_history=world_history
+        city_history=city_history,
+        number_of_generations=number_of_generations
     )
 
     return {
@@ -40,7 +40,7 @@ async def reasoning(
 
     model = load_chat_model(configuration.model).bind_tools(TOOLS)
 
-    reasoning_message = f"We currently have {len(state.history)}/{state.number_of_epochs} epochs in the world. Please add another epoch to the world unless we're done."
+    reasoning_message = f"We currently have {len(state.history)}/{state.number_of_generations} generations in the family. Please add another generation to the family unless we're done."
 
     state.messages.append(HumanMessage(content=reasoning_message))
     messages = state.messages
@@ -116,4 +116,4 @@ graph = builder.compile(
     interrupt_before=[],  # Add node names here to update state before they're called
     interrupt_after=[],  # Add node names here to update state after they're called
 )
-graph.name = "Generate City Agent"  # This customizes the name in LangSmith
+graph.name = "Generate Family Agent"  # This customizes the name in LangSmith

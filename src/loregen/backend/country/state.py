@@ -10,9 +10,9 @@ from langgraph.managed import IsLastStep
 
 @dataclass
 class InputState:
-    country_history: pd.DataFrame = field(default_factory=pd.DataFrame)
     world_history: pd.DataFrame = field(default_factory=pd.DataFrame)
     final_conditions: str = field(default="")
+    number_of_epochs: int = field(default=10)
     messages: Annotated[Sequence[AnyMessage], add_messages] = field(
         default_factory=list
     )

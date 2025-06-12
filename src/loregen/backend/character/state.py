@@ -10,8 +10,8 @@ from langgraph.managed import IsLastStep
 
 @dataclass
 class InputState:
-    country_history: pd.DataFrame = field(default_factory=pd.DataFrame)
-    world_history: pd.DataFrame = field(default_factory=pd.DataFrame)
+    family_history: pd.DataFrame = field(default_factory=pd.DataFrame)
+    city_history: pd.DataFrame = field(default_factory=pd.DataFrame)
     final_conditions: str = field(default="")
     messages: Annotated[Sequence[AnyMessage], add_messages] = field(
         default_factory=list
