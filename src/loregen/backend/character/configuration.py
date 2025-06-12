@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, fields
-from loregen.backend.world.prompts import SYSTEM_PROMPT, REASONING_PROMPT
+from loregen.backend.character.prompts import SYSTEM_PROMPT
 from typing import Annotated, Optional
 
 from langchain_core.runnables import RunnableConfig, ensure_config

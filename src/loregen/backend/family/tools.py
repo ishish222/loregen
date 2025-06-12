@@ -1,7 +1,7 @@
 from langgraph.prebuilt import InjectedState
 from typing import Annotated
 from typing import Any, Callable, List
-from loregen.backend.world.state import State
+from loregen.backend.family.state import State
 
 
 async def append_family_history(

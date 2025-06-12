@@ -35,7 +35,6 @@ async def generate_global_history(
     final_conditions: str,
     number_of_epochs: int = 5
 ):
-
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
     assistant_id = "world"
@@ -45,7 +44,7 @@ async def generate_global_history(
     input = {
         "final_conditions": final_conditions,
         "number_of_epochs": number_of_epochs
-        }
+    }
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
@@ -67,9 +66,12 @@ async def generate_country_history(
     new_thread = await client.threads.create()
     print(new_thread)
 
+    # Convert DataFrame to dictionary
+    world_history_dict = world_history.to_dict(orient='records')
+
     input = {
         "final_conditions": final_conditions,
-        "world_history": world_history
+        "world_history": world_history_dict
     }
 
     async for namespace, event in client.runs.stream(
@@ -93,10 +95,14 @@ async def generate_city_history(
     new_thread = await client.threads.create()
     print(new_thread)
 
+    # Convert DataFrames to dictionaries
+    world_history_dict = world_history.to_dict(orient='records')
+    country_history_dict = country_history.to_dict(orient='records')
+
     input = {
         "final_conditions": final_conditions,
-        "world_history": world_history,
-        "country_history": country_history
+        "world_history": world_history_dict,
+        "country_history": country_history_dict
     }
 
     async for namespace, event in client.runs.stream(
@@ -121,10 +127,14 @@ async def generate_family_history(
     new_thread = await client.threads.create()
     print(new_thread)
 
+    # Convert DataFrames to dictionaries
+    city_history_dict = city_history.to_dict(orient='records')
+    country_history_dict = country_history.to_dict(orient='records')
+
     input = {
         "final_conditions": final_conditions,
-        "city_history": city_history,
-        "country_history": country_history,
+        "city_history": city_history_dict,
+        "country_history": country_history_dict,
         "number_of_generations": number_of_generations
     }
 
@@ -150,10 +160,14 @@ async def generate_character_history(
     new_thread = await client.threads.create()
     print(new_thread)
 
+    # Convert DataFrames to dictionaries
+    family_history_dict = family_history.to_dict(orient='records')
+    city_history_dict = city_history.to_dict(orient='records')
+
     input = {
         "final_conditions": final_conditions,
-        "family_history": family_history,
-        "city_history": city_history,
+        "family_history": family_history_dict,
+        "city_history": city_history_dict,
         "number_of_chapters": number_of_chapters
     }
 
@@ -179,25 +193,25 @@ with gr.Blocks() as dashboard:
                 gh_conditions_world = gr.Textbox(label="Global history's final conditions")
                 gh_number_of_epochs = gr.Number(label="Number of epochs", value=5)
                 gh_button_world = gr.Button("Generate")
-                gh_output_world = gr.DataFrame(label="Global history")
+                gh_output_world = gr.DataFrame(label="Global history", wrap=True)
             with gr.TabItem("Country history"):
                 gh_conditions_country = gr.Textbox(label="Country's final conditions")
                 gh_button_country = gr.Button("Generate")
-                gh_output_country = gr.DataFrame(label="Country's history")
+                gh_output_country = gr.DataFrame(label="Country's history", wrap=True)
             with gr.TabItem("City history"):
                 gh_conditions_city = gr.Textbox(label="City's final conditions")
                 gh_button_city = gr.Button("Generate")
-                gh_output_city = gr.DataFrame(label="City's history")
+                gh_output_city = gr.DataFrame(label="City's history", wrap=True)
             with gr.TabItem("Family history"):
                 gh_conditions_family = gr.Textbox(label="Family's final conditions")
                 gh_number_of_generations = gr.Number(label="Number of generations", value=10)
                 gh_button_family = gr.Button("Generate")
-                gh_output_family = gr.DataFrame(label="Family's history")
+                gh_output_family = gr.DataFrame(label="Family's history", wrap=True)
             with gr.TabItem("Character history"):
                 gh_conditions_character = gr.Textbox(label="Character's final conditions")
                 gh_number_of_chapters = gr.Number(label="Number of chapters", value=10)
                 gh_button_character = gr.Button("Generate")
-                gh_output_character = gr.DataFrame(label="Character's history")
+                gh_output_character = gr.DataFrame(label="Character's history", wrap=True)
 
     gh_button_world.click(fn=generate_global_history, inputs=[gh_conditions_world, gh_number_of_epochs], outputs=[gh_output_world])
     gh_button_country.click(fn=generate_country_history, inputs=[gh_conditions_country, gh_output_world], outputs=[gh_output_country])
