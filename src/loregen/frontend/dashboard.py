@@ -194,7 +194,7 @@ with gr.Blocks() as dashboard:
         with gr.Tabs() as main_tabs:
             with gr.TabItem("Global history"):
                 gh_conditions_world = gr.Textbox(label="Global history's final conditions")
-                gh_number_of_epochs = gr.Number(label="Number of epochs", value=5)
+                gh_number_of_epochs = gr.Number(label="Number of epochs", value=5, maximum=10)
                 gh_button_world = gr.Button("Generate")
                 gh_output_world = gr.DataFrame(label="Global history", wrap=True)
             with gr.TabItem("Country history"):
@@ -207,12 +207,12 @@ with gr.Blocks() as dashboard:
                 gh_output_city = gr.DataFrame(label="City's history", wrap=True)
             with gr.TabItem("Family history"):
                 gh_conditions_family = gr.Textbox(label="Family's final conditions")
-                gh_number_of_generations = gr.Number(label="Number of generations", value=10)
+                gh_number_of_generations = gr.Number(label="Number of generations", value=5, maximum=10)
                 gh_button_family = gr.Button("Generate")
                 gh_output_family = gr.DataFrame(label="Family's history", wrap=True)
             with gr.TabItem("Character history"):
                 gh_conditions_character = gr.Textbox(label="Character's final conditions")
-                gh_number_of_chapters = gr.Number(label="Number of chapters", value=10)
+                gh_number_of_chapters = gr.Number(label="Number of chapters", value=5, maximum=10)
                 gh_button_character = gr.Button("Generate")
                 gh_output_character = gr.DataFrame(label="Character's history", wrap=True)
     with gr.Row():
