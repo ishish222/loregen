@@ -24,10 +24,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
 
       - run: terraform init -backend-config=backend-dev.conf -reconfigure
-        working-directory: src/frontend/terraform
+        working-directory: src/loregen/frontend/terraform
 
       - run: terraform plan
-        working-directory: src/frontend/terraform
+        working-directory: src/loregen/frontend/terraform
 
       - run: terraform apply -auto-approve -auto-approve -var="restore_from_snapshot=true"
-        working-directory: src/frontend/terraform
+        working-directory: src/loregen/frontend/terraform
