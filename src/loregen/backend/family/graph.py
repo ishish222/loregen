@@ -18,10 +18,12 @@ async def system(
     configuration = Configuration.from_runnable_config(config)
 
     final_conditions = state.final_conditions
+    country_history = state.country_history
     city_history = state.city_history
     number_of_generations = state.number_of_generations
     system_message = configuration.system_prompt.format(
         final_conditions=final_conditions,
+        country_history=country_history,
         city_history=city_history,
         number_of_generations=number_of_generations
     )
