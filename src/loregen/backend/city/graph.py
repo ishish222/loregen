@@ -40,7 +40,7 @@ async def reasoning(
 
     model = load_chat_model(configuration.model).bind_tools(TOOLS)
 
-    reasoning_message = f"We currently have {len(state.history)}/{len(state.world_history)} epochs in the world. Please add another epoch to the world unless we're done."
+    reasoning_message = f"We currently have {len(state.history)}/{len(state.world_history)} epochs in the history of the city. Please add another epoch to the history unless we're done."
 
     state.messages.append(HumanMessage(content=reasoning_message))
     messages = state.messages
