@@ -12,6 +12,7 @@ from langgraph.managed import IsLastStep
 class InputState:
     family_history: pd.DataFrame = field(default_factory=pd.DataFrame)
     city_history: pd.DataFrame = field(default_factory=pd.DataFrame)
+    number_of_chapters: int = field(default=10)
     final_conditions: str = field(default="")
     messages: Annotated[Sequence[AnyMessage], add_messages] = field(
         default_factory=list
