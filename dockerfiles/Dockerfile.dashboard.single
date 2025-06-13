@@ -33,7 +33,7 @@ ARG COMMIT_SHA
 ENV CODE_VERSION=$COMMIT_SHA
 RUN echo "COMMIT_SHA is: $COMMIT_SHA"
 
-WORKDIR /app/src/frontend
+WORKDIR /app/src/loregen/frontend
 EXPOSE 80
 
 # Default script to run, to be overwritten in terraform
