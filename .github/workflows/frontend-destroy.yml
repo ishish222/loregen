@@ -2,10 +2,9 @@ name: Frontend terraform - destroy
 
 on:
   workflow_dispatch:
-  #schedule:
-    # At 00:00 (midnight) every day
-    #- cron: '0 0 * * *'
-
+  schedule:
+    - cron: '0 22 * * *'  # 22:00 UTC = 00:00 Europe/Warsaw
+    
 jobs:
   terraform:
     name: Distroy the project
