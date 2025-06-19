@@ -36,7 +36,8 @@ else:
 
 async def generate_global_history(
     final_conditions: str,
-    number_of_epochs: int = 5
+    number_of_epochs: int = 5,
+    grand_narratives: pd.DataFrame = None
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -56,12 +57,15 @@ async def generate_global_history(
         stream_mode="values"
     ):
         if "history" in event:
-            yield pd.DataFrame(event["history"])
+            history = pd.DataFrame(event["history"])
+            grand_narratives = grand_narratives.append(pd.DataFrame(event["grand_narratives"]))
+            yield history, grand_narratives
 
 
 async def generate_country_history(
     final_conditions: str,
-    world_history: pd.DataFrame
+    world_history: pd.DataFrame,
+    grand_narratives: pd.DataFrame = None
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -84,13 +88,16 @@ async def generate_country_history(
         stream_mode="values"
     ):
         if "history" in event:
-            yield pd.DataFrame(event["history"])
+            history = pd.DataFrame(event["history"])
+            grand_narratives = grand_narratives.append(pd.DataFrame(event["grand_narratives"]))
+            yield history, grand_narratives
 
 
 async def generate_city_history(
     final_conditions: str,
     world_history: pd.DataFrame,
-    country_history: pd.DataFrame
+    country_history: pd.DataFrame,
+    grand_narratives: pd.DataFrame = None
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -115,14 +122,17 @@ async def generate_city_history(
         stream_mode="values"
     ):
         if "history" in event:
-            yield pd.DataFrame(event["history"])
+            history = pd.DataFrame(event["history"])
+            grand_narratives = grand_narratives.append(pd.DataFrame(event["grand_narratives"]))
+            yield history, grand_narratives
 
 
 async def generate_family_history(
     final_conditions: str,
     city_history: pd.DataFrame,
     country_history: pd.DataFrame,
-    number_of_generations: int = 10
+    number_of_generations: int = 10,
+    grand_narratives: pd.DataFrame = None
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -148,7 +158,9 @@ async def generate_family_history(
         stream_mode="values"
     ):
         if "history" in event:
-            yield pd.DataFrame(event["history"])
+            history = pd.DataFrame(event["history"])
+            grand_narratives = grand_narratives.append(pd.DataFrame(event["grand_narratives"]))
+            yield history, grand_narratives
 
 
 async def generate_character_history(
@@ -210,6 +222,9 @@ with gr.Blocks() as dashboard:
                 gh_number_of_generations = gr.Number(label="Number of generations", value=5, maximum=10)
                 gh_button_family = gr.Button("Generate")
                 gh_output_family = gr.DataFrame(label="Family's history", wrap=True)
+            with gr.TabItem("Grand narratives"):
+                gh_button_grand_narratives = gr.Button("Generate")
+                gh_output_grand_narratives = gr.DataFrame(label="Grand narratives", wrap=True)
             with gr.TabItem("Character history"):
                 gh_conditions_character = gr.Textbox(label="Character's final conditions")
                 gh_number_of_chapters = gr.Number(label="Number of chapters", value=5, maximum=10)
@@ -224,11 +239,37 @@ with gr.Blocks() as dashboard:
             load_btn = gr.Button("Load State")
 
     # Event handlers
-    gh_button_world.click(fn=generate_global_history, inputs=[gh_conditions_world, gh_number_of_epochs], outputs=[gh_output_world])
-    gh_button_country.click(fn=generate_country_history, inputs=[gh_conditions_country, gh_output_world], outputs=[gh_output_country])
-    gh_button_city.click(fn=generate_city_history, inputs=[gh_conditions_city, gh_output_country, gh_output_world], outputs=[gh_output_city])
-    gh_button_family.click(fn=generate_family_history, inputs=[gh_conditions_family, gh_output_city, gh_output_country, gh_number_of_generations], outputs=[gh_output_family])
-    gh_button_character.click(fn=generate_character_history, inputs=[gh_conditions_character, gh_output_family, gh_output_city, gh_number_of_chapters], outputs=[gh_output_character])
+    gh_button_world.click(
+        fn=generate_global_history,
+        inputs=[gh_conditions_world, gh_number_of_epochs, gh_output_grand_narratives],
+        outputs=[gh_output_world, gh_output_grand_narratives]
+        )
+
+    gh_button_country.click(
+        fn=generate_country_history,
+        inputs=[gh_conditions_country, gh_output_world, gh_output_grand_narratives],
+        outputs=[gh_output_country, gh_output_grand_narratives]
+        )
+
+    gh_button_city.click(
+        fn=generate_city_history,
+        inputs=[gh_conditions_city, gh_output_country, gh_output_world, gh_output_grand_narratives],
+        outputs=[gh_output_city, gh_output_grand_narratives]
+        )
+
+    gh_button_family.click(
+        fn=generate_family_history,
+        inputs=[gh_conditions_family, gh_output_city, gh_output_country, gh_number_of_generations, gh_output_grand_narratives],
+        outputs=[gh_output_family, gh_output_grand_narratives]
+        )
+
+    # for now, let's leave grand narratives as RO
+
+    gh_button_character.click(
+        fn=generate_character_history,
+        inputs=[gh_conditions_character, gh_output_family, gh_output_city, gh_number_of_chapters, gh_output_grand_narratives],
+        outputs=[gh_output_character, gh_output_grand_narratives]
+        )
 
     # Save/Load handlers
     def save_state_handler(
@@ -242,6 +283,7 @@ with gr.Blocks() as dashboard:
         family_conditions: str,
         family_generations: int,
         family_df: pd.DataFrame,
+        grand_narratives: pd.DataFrame,
         character_conditions: str,
         character_chapters: int,
         character_df: pd.DataFrame,
@@ -257,6 +299,7 @@ with gr.Blocks() as dashboard:
             family_conditions,
             family_generations,
             family_df,
+            grand_narratives,
             character_conditions,
             character_chapters,
             character_df
@@ -279,6 +322,7 @@ with gr.Blocks() as dashboard:
             gh_conditions_family,
             gh_number_of_generations,
             gh_output_family,
+            gh_output_grand_narratives,
             gh_conditions_character,
             gh_number_of_chapters,
             gh_output_character
@@ -302,6 +346,7 @@ with gr.Blocks() as dashboard:
             state["family_conditions"],
             state["family_generations"],
             state["family_df"],
+            state["grand_narratives"],
             state["character_conditions"],
             state["character_chapters"],
             state["character_df"]
@@ -321,6 +366,7 @@ with gr.Blocks() as dashboard:
             gh_conditions_family,
             gh_number_of_generations,
             gh_output_family,
+            gh_output_grand_narratives,
             gh_conditions_character,
             gh_number_of_chapters,
             gh_output_character

@@ -18,6 +18,7 @@ class InputState:
         default_factory=list
     )
     history: list[dict] = field(default_factory=list)
+    grand_narratives: list[dict] = field(default_factory=list)
 
 
 @dataclass
