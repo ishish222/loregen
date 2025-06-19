@@ -107,6 +107,7 @@ async def reasoning_narratives(
     return {
         'messages': [response],
         'history': state.history,
+        'grand_narratives': state.grand_narratives,
     }
 
 

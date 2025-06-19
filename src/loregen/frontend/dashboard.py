@@ -56,6 +56,8 @@ async def generate_global_history(
         input=input,
         stream_mode="values"
     ):
+        import pdb
+        pdb.set_trace()
         if "history" in event:
             history = pd.DataFrame(event["history"])
             if "grand_narratives" in event:
