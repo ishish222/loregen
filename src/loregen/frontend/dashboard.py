@@ -54,7 +54,7 @@ async def generate_global_history(
 
     config = {
         "configurable": {
-            "model_id": model_id
+            "model": model_id
         }
     }
 
