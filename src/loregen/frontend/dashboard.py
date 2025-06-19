@@ -105,6 +105,11 @@ async def generate_country_history(
         }
     }
 
+    if grand_narratives is None:
+        grand_narratives = []
+    else:
+        grand_narratives = grand_narratives.to_dict(orient='records')
+
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
         assistant_id,
@@ -114,8 +119,11 @@ async def generate_country_history(
     ):
         if "history" in event:
             history = pd.DataFrame(event["history"])
-            grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
-            yield history, grand_narratives
+            if "grand_narratives" in event:
+                grand_narratives = event["grand_narratives"]
+
+            grand_narratives_df = pd.DataFrame(grand_narratives)
+            yield history, grand_narratives_df
 
 
 async def generate_city_history(
@@ -147,6 +155,11 @@ async def generate_city_history(
         }
     }
 
+    if grand_narratives is None:
+        grand_narratives = []
+    else:
+        grand_narratives = grand_narratives.to_dict(orient='records')
+
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
         assistant_id,
@@ -156,8 +169,11 @@ async def generate_city_history(
     ):
         if "history" in event:
             history = pd.DataFrame(event["history"])
-            grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
-            yield history, grand_narratives
+            if "grand_narratives" in event:
+                grand_narratives = event["grand_narratives"]
+
+            grand_narratives_df = pd.DataFrame(grand_narratives)
+            yield history, grand_narratives_df
 
 
 async def generate_family_history(
@@ -191,6 +207,11 @@ async def generate_family_history(
         }
     }
 
+    if grand_narratives is None:
+        grand_narratives = []
+    else:
+        grand_narratives = grand_narratives.to_dict(orient='records')
+
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
         assistant_id,
@@ -200,8 +221,11 @@ async def generate_family_history(
     ):
         if "history" in event:
             history = pd.DataFrame(event["history"])
-            grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
-            yield history, grand_narratives
+            if "grand_narratives" in event:
+                grand_narratives = event["grand_narratives"]
+
+            grand_narratives_df = pd.DataFrame(grand_narratives)
+            yield history, grand_narratives_df
 
 
 async def generate_character_history(
