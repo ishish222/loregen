@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 LABEL authors="ts@ishish.io"
 
 # Install build dependencies
@@ -39,5 +39,9 @@ EXPOSE 80
 # Default script to run, to be overwritten in terraform
 # ENV SCRIPT_NAME=app.py 
 ENV MODULE=loregen.frontend.app
+ENV PYTHONPATH=/app/src
 
-ENTRYPOINT echo "Running with CODE_VERSION=$CODE_VERSION" && PYTHONPATH=src poetry run python -m $MODULE
+COPY dockerfiles/start.sh /app/dockerfiles/start.sh
+RUN chmod +x /app/dockerfiles/start.sh
+
+ENTRYPOINT ["/app/dockerfiles/start.sh"]
