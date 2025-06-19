@@ -4,7 +4,8 @@ import os
 import gradio as gr
 import pandas as pd
 from dotenv import load_dotenv, find_dotenv
-from state_manager import save_state, load_state, save_state_to_file, load_state_from_file
+from loregen.backend.common import models, model_default_name
+from loregen.frontend.state_manager import save_state, load_state, save_state_to_file, load_state_from_file
 from langgraph_sdk import get_client
 import boto3
 
@@ -37,7 +38,8 @@ else:
 async def generate_global_history(
     final_conditions: str,
     number_of_epochs: int = 5,
-    grand_narratives: pd.DataFrame = None
+    grand_narratives: pd.DataFrame = None,
+    model_id: str = model_default_name
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -50,22 +52,31 @@ async def generate_global_history(
         "number_of_epochs": number_of_epochs
     }
 
+    config = {
+        "configurable": {
+            "model_id": model_id
+        }
+    }
+
+    if grand_narratives is None:
+        grand_narratives = []
+    else:
+        grand_narratives = grand_narratives.to_dict(orient='records')
+
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
         assistant_id,
         input=input,
+        config=config,
         stream_mode="values"
     ):
-        import pdb
-        pdb.set_trace()
         if "history" in event:
             history = pd.DataFrame(event["history"])
             if "grand_narratives" in event:
-                grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
-            else:
-                grand_narratives = []
+                grand_narratives = event["grand_narratives"]
 
-            yield history, grand_narratives
+            grand_narratives_df = pd.DataFrame(grand_narratives)
+            yield history, grand_narratives_df
 
 
 async def generate_country_history(
@@ -209,6 +220,16 @@ with gr.Blocks() as dashboard:
         with gr.Column():
             logout_btn = gr.Button("Logout", link="/logout")
     with gr.Row():
+        with gr.Accordion("Configuration", open=False):
+            with gr.Row():
+                model_choice = gr.Dropdown(
+                    models.keys(),
+                    value=model_default_name,
+                    label='model',
+                    interactive=True
+                    )
+
+    with gr.Row():
         with gr.Tabs() as main_tabs:
             with gr.TabItem("Global history"):
                 gh_conditions_world = gr.Textbox(label="Global history's final conditions")
@@ -247,7 +268,7 @@ with gr.Blocks() as dashboard:
     # Event handlers
     gh_button_world.click(
         fn=generate_global_history,
-        inputs=[gh_conditions_world, gh_number_of_epochs, gh_output_grand_narratives],
+        inputs=[gh_conditions_world, gh_number_of_epochs, gh_output_grand_narratives, model_choice],
         outputs=[gh_output_world, gh_output_grand_narratives]
         )
 

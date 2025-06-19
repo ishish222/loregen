@@ -37,6 +37,7 @@ WORKDIR /app/src/loregen/frontend
 EXPOSE 80
 
 # Default script to run, to be overwritten in terraform
-ENV SCRIPT_NAME=app.py 
+# ENV SCRIPT_NAME=app.py 
+ENV MODULE=loregen.frontend.app
 
-CMD echo "Running with CODE_VERSION=$CODE_VERSION" && poetry run python -u $SCRIPT_NAME
+ENTRYPOINT echo "Running with CODE_VERSION=$CODE_VERSION" && PYTHONPATH=src poetry run python -m $MODULE

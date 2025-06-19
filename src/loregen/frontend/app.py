@@ -10,10 +10,10 @@ _ = load_dotenv(find_dotenv())
 import logging
 
 # libs that rely on env variables
-from middleware.auth import AuthMiddleware
+from loregen.frontend.middleware.auth import AuthMiddleware
 
 # Load apps
-from dashboard import dashboard
+from loregen.frontend.dashboard import dashboard
 
 # Load env variables
 ENVIRONMENT = os.environ['ENVIRONMENT']

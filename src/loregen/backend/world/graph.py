@@ -8,6 +8,7 @@ from loregen.backend.world.state import InputState, State
 from loregen.backend.world.configuration import Configuration
 from loregen.backend.world.tools import TOOLS, TOOLS_NARRATIVES
 from loregen.backend.world.utils import load_chat_model
+from loregen.backend.common import models
 
 
 async def system(
