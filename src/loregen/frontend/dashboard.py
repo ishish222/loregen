@@ -58,7 +58,7 @@ async def generate_global_history(
     ):
         if "history" in event:
             history = pd.DataFrame(event["history"])
-            grand_narratives = grand_narratives.append(pd.DataFrame(event["grand_narratives"]))
+            grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
             yield history, grand_narratives
 
 
@@ -89,7 +89,7 @@ async def generate_country_history(
     ):
         if "history" in event:
             history = pd.DataFrame(event["history"])
-            grand_narratives = grand_narratives.append(pd.DataFrame(event["grand_narratives"]))
+            grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
             yield history, grand_narratives
 
 
@@ -123,7 +123,7 @@ async def generate_city_history(
     ):
         if "history" in event:
             history = pd.DataFrame(event["history"])
-            grand_narratives = grand_narratives.append(pd.DataFrame(event["grand_narratives"]))
+            grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
             yield history, grand_narratives
 
 
@@ -159,7 +159,7 @@ async def generate_family_history(
     ):
         if "history" in event:
             history = pd.DataFrame(event["history"])
-            grand_narratives = grand_narratives.append(pd.DataFrame(event["grand_narratives"]))
+            grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
             yield history, grand_narratives
 
 
