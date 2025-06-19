@@ -82,7 +82,8 @@ async def generate_global_history(
 async def generate_country_history(
     final_conditions: str,
     world_history: pd.DataFrame,
-    grand_narratives: pd.DataFrame = None
+    grand_narratives: pd.DataFrame = None,
+    model_id: str = model_default_name
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -98,10 +99,17 @@ async def generate_country_history(
         "world_history": world_history_dict
     }
 
+    config = {
+        "configurable": {
+            "model": model_id
+        }
+    }
+
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
         assistant_id,
         input=input,
+        config=config,
         stream_mode="values"
     ):
         if "history" in event:
@@ -114,7 +122,8 @@ async def generate_city_history(
     final_conditions: str,
     world_history: pd.DataFrame,
     country_history: pd.DataFrame,
-    grand_narratives: pd.DataFrame = None
+    grand_narratives: pd.DataFrame = None,
+    model_id: str = model_default_name
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -132,10 +141,17 @@ async def generate_city_history(
         "country_history": country_history_dict
     }
 
+    config = {
+        "configurable": {
+            "model": model_id
+        }
+    }
+
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
         assistant_id,
         input=input,
+        config=config,
         stream_mode="values"
     ):
         if "history" in event:
@@ -149,7 +165,8 @@ async def generate_family_history(
     city_history: pd.DataFrame,
     country_history: pd.DataFrame,
     number_of_generations: int = 10,
-    grand_narratives: pd.DataFrame = None
+    grand_narratives: pd.DataFrame = None,
+    model_id: str = model_default_name
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -168,10 +185,17 @@ async def generate_family_history(
         "number_of_generations": number_of_generations
     }
 
+    config = {
+        "configurable": {
+            "model": model_id
+        }
+    }
+
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
         assistant_id,
         input=input,
+        config=config,
         stream_mode="values"
     ):
         if "history" in event:
@@ -184,7 +208,8 @@ async def generate_character_history(
     final_conditions: str,
     family_history: pd.DataFrame,
     city_history: pd.DataFrame,
-    number_of_chapters: int = 10
+    number_of_chapters: int = 10,
+    model_id: str = model_default_name
 ):
     client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
 
@@ -203,10 +228,17 @@ async def generate_character_history(
         "number_of_chapters": number_of_chapters
     }
 
+    config = {
+        "configurable": {
+            "model": model_id
+        }
+    }
+
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
         assistant_id,
         input=input,
+        config=config,
         stream_mode="values"
     ):
         if "history" in event:
@@ -274,19 +306,19 @@ with gr.Blocks() as dashboard:
 
     gh_button_country.click(
         fn=generate_country_history,
-        inputs=[gh_conditions_country, gh_output_world, gh_output_grand_narratives],
+        inputs=[gh_conditions_country, gh_output_world, gh_output_grand_narratives, model_choice],
         outputs=[gh_output_country, gh_output_grand_narratives]
         )
 
     gh_button_city.click(
         fn=generate_city_history,
-        inputs=[gh_conditions_city, gh_output_country, gh_output_world, gh_output_grand_narratives],
+        inputs=[gh_conditions_city, gh_output_country, gh_output_world, gh_output_grand_narratives, model_choice],
         outputs=[gh_output_city, gh_output_grand_narratives]
         )
 
     gh_button_family.click(
         fn=generate_family_history,
-        inputs=[gh_conditions_family, gh_output_city, gh_output_country, gh_number_of_generations, gh_output_grand_narratives],
+        inputs=[gh_conditions_family, gh_output_city, gh_output_country, gh_number_of_generations, gh_output_grand_narratives, model_choice],
         outputs=[gh_output_family, gh_output_grand_narratives]
         )
 
@@ -294,7 +326,7 @@ with gr.Blocks() as dashboard:
 
     gh_button_character.click(
         fn=generate_character_history,
-        inputs=[gh_conditions_character, gh_output_family, gh_output_city, gh_number_of_chapters],
+        inputs=[gh_conditions_character, gh_output_family, gh_output_city, gh_number_of_chapters, model_choice],
         outputs=[gh_output_character, gh_output_grand_narratives]
         )
 
