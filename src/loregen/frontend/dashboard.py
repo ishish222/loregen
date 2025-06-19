@@ -58,7 +58,11 @@ async def generate_global_history(
     ):
         if "history" in event:
             history = pd.DataFrame(event["history"])
-            grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
+            if "grand_narratives" in event:
+                grand_narratives = pd.concat([grand_narratives, pd.DataFrame(event["grand_narratives"])], ignore_index=True)
+            else:
+                grand_narratives = []
+
             yield history, grand_narratives
 
 
@@ -267,7 +271,7 @@ with gr.Blocks() as dashboard:
 
     gh_button_character.click(
         fn=generate_character_history,
-        inputs=[gh_conditions_character, gh_output_family, gh_output_city, gh_number_of_chapters, gh_output_grand_narratives],
+        inputs=[gh_conditions_character, gh_output_family, gh_output_city, gh_number_of_chapters],
         outputs=[gh_output_character, gh_output_grand_narratives]
         )
 

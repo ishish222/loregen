@@ -165,7 +165,7 @@ def route_model_output_narratives(state: State) -> Literal["__end__", "tools_nar
     if not last_message.tool_calls:
         return "__end__"
     # Otherwise we execute the requested actions
-    return "tools"
+    return "tools_narratives"
 
 
 builder.add_conditional_edges(
