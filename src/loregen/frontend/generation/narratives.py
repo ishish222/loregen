@@ -8,7 +8,7 @@ from loregen.frontend.common import get_secret
 
 _ = load_dotenv(find_dotenv())
 
-ENDPOINT_HISTORY = os.environ['ENDPOINT_HISTORY']
+ENDPOINT_NARRATIVES = os.environ['ENDPOINT_NARRATIVES']
 LANGCHAIN_API_KEY = os.environ['LANGCHAIN_API_KEY']
 ENVIRONMENT = os.environ['ENVIRONMENT']
 
