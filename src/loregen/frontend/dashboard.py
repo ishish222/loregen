@@ -81,6 +81,9 @@ with gr.Blocks() as dashboard:
                 gh_number_of_chapters = gr.Number(label="Number of chapters", value=5, maximum=10)
                 gh_button_character = gr.Button("Generate")
                 gh_output_history_character = gr.DataFrame(label="Character's history", wrap=True)
+            with gr.TabItem("Character sheet"):
+                gh_conditions_character_sheet = gr.Textbox(label="Character's final conditions")
+                gh_button_character_sheet = gr.Button("Generate")
     with gr.Row():
         with gr.Column():
             save_btn = gr.Button("Save State")
