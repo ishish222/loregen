@@ -1,11 +1,11 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "world": "./src/loregen/backend/world/graph.py:graph",
-    "city": "./src/loregen/backend/city/graph.py:graph",
-    "country": "./src/loregen/backend/country/graph.py:graph",
-    "family": "./src/loregen/backend/family/graph.py:graph",
-    "character": "./src/loregen/backend/character/graph.py:graph"
+    "history_world": "./src/loregen/backend/history_world/graph.py:graph",
+    "history_city": "./src/loregen/backend/history_city/graph.py:graph",
+    "history_country": "./src/loregen/backend/history_country/graph.py:graph",
+    "history_family": "./src/loregen/backend/history_family/graph.py:graph",
+    "history_character": "./src/loregen/backend/history_character/graph.py:graph"
   },
   "env": ".env"
 }
