@@ -2,8 +2,8 @@ name: Frontend terraform - apply
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 10 * * *'  # 10:00 UTC = 12:00 Europe/Warsaw (CET/CEST)
+  # schedule:
+  #   - cron: '0 10 * * *'  # 10:00 UTC = 12:00 Europe/Warsaw (CET/CEST)
 
 
 jobs:

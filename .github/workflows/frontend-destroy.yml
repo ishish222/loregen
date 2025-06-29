@@ -2,8 +2,8 @@ name: Frontend terraform - destroy
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 22 * * *'  # 22:00 UTC = 00:00 Europe/Warsaw
+  # schedule:
+  #   - cron: '0 22 * * *'  # 22:00 UTC = 00:00 Europe/Warsaw
     
 jobs:
   terraform:
