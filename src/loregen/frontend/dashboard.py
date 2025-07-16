@@ -20,7 +20,7 @@ from loregen.frontend.generation.history import (
 from loregen.frontend.generation.narratives import (
     generate_narratives_from_history
 )
-from loregen.backend.common import model_default_name, models
+from loregen_common import model_default_name, models
 
 _ = load_dotenv(find_dotenv())
 
@@ -84,6 +84,20 @@ with gr.Blocks() as dashboard:
             with gr.TabItem("Character sheet"):
                 gh_conditions_character_sheet = gr.Textbox(label="Character's final conditions")
                 gh_button_character_sheet = gr.Button("Generate")
+                with gr.Group():
+                    gh_output_character_sheet_primary_sex = gr.Dropdown(["male", "female"], value="male", label="Character's primary sex", interactive=True)
+                    gh_output_character_sheet_brain_sex = gr.Dropdown(["male", "female"], value="male", label="Character's brain sex", interactive=True)
+                    gh_output_character_sheet_sexuality = gr.Dropdown(["heterosexual", "homosexual"], value="heterosexual", label="Character's sexuality", interactive=True)
+                    gh_output_character_sheet_hexaco_traits = gr.DataFrame(label="Character's HEXACO traits", wrap=True)
+                with gr.Group():
+                    gh_output_character_sheet_family_systems_inheritance = gr.DataFrame(label="Character's family systems inheritance", wrap=True)
+                    gh_output_character_sheet_grand_narratives = gr.DataFrame(label="Character's grand narratives", wrap=True)
+                    gh_output_character_sheet_pursued_identities = gr.DataFrame(label="Character's pursued identities", wrap=True)
+                    gh_output_character_sheet_avoided_identities = gr.DataFrame(label="Character's avoided identities", wrap=True)
+                    gh_output_character_sheet_values = gr.DataFrame(label="Character's values", wrap=True)
+                    gh_output_character_sheet_behavioral_repertoire = gr.DataFrame(label="Character's behavioral repertoire", wrap=True)
+                    gh_output_character_sheet_language_and_vocabulary = gr.DataFrame(label="Character's language and vocabulary", wrap=True)
+
     with gr.Row():
         with gr.Column():
             save_btn = gr.Button("Save State")

@@ -1,7 +1,7 @@
 import os
 import gradio as gr
 import pandas as pd
-from loregen.backend.common import model_default_name
+from loregen_common import model_default_name
 from langgraph_sdk import get_client
 from dotenv import load_dotenv, find_dotenv
 from loregen.frontend.common import get_secret
@@ -41,12 +41,13 @@ async def generate_narratives_from_history(
     if len(history_family) == 0:
         raise gr.Error("Please provide a history for the family")
 
-    client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
+    client = get_client(url=ENDPOINT_NARRATIVES, api_key=langchain_api_key)
 
     narratives_from_history_world = []
     narratives_from_history_country = []
     narratives_from_history_city = []
     narratives_from_history_family = []
+    grand_narratives = []
 
     # Convert DataFrames to dictionaries
     history_world_dict = history_world.to_dict(orient='records')
@@ -60,7 +61,6 @@ async def generate_narratives_from_history(
         }
     }
 
-    assistant_id = "narratives_from_history_world"
     new_thread = await client.threads.create()
     print(new_thread)
 
@@ -71,14 +71,16 @@ async def generate_narratives_from_history(
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
-        assistant_id,
+        "narratives_from_history_world",
         input=input,
         config=config,
         stream_mode="values"
     ):
-        if "narratives_from_history_world" in event:
-            narratives_from_history_world = event["narratives_from_history_world"]
-            yield narratives_from_history_world, narratives_from_history_country, narratives_from_history_city, narratives_from_history_family
+        if "grand_narratives" in event:
+            if len(event["grand_narratives"]) > 0:
+                # grand_narratives.extend(event["grand_narratives"])
+                grand_narratives = event["grand_narratives"]
+                yield pd.DataFrame(grand_narratives)
 
     input = {
         "history_country": history_country_dict,
@@ -87,14 +89,16 @@ async def generate_narratives_from_history(
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
-        assistant_id,
+        "narratives_from_history_country",
         input=input,
         config=config,
         stream_mode="values"
     ):
-        if "narratives_from_history_country" in event:
-            narratives_from_history_country = event["narratives_from_history_country"]
-            yield narratives_from_history_world, narratives_from_history_country, narratives_from_history_city, narratives_from_history_family
+        if "grand_narratives" in event:
+            if len(event["grand_narratives"]) > 0:
+                # grand_narratives.extend(event["grand_narratives"])
+                grand_narratives = event["grand_narratives"]
+                yield pd.DataFrame(grand_narratives)
 
     input = {
         "history_city": history_city_dict,
@@ -103,14 +107,16 @@ async def generate_narratives_from_history(
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
-        assistant_id,
+        "narratives_from_history_city",
         input=input,
         config=config,
         stream_mode="values"
     ):
-        if "narratives_from_history_city" in event:
-            narratives_from_history_city = event["narratives_from_history_city"]
-            yield narratives_from_history_world, narratives_from_history_country, narratives_from_history_city, narratives_from_history_family
+        if "grand_narratives" in event:
+            if len(event["grand_narratives"]) > 0:
+                # grand_narratives.extend(event["grand_narratives"])
+                grand_narratives = event["grand_narratives"]
+                yield pd.DataFrame(grand_narratives)
 
     input = {
         "history_family": history_family_dict,
@@ -119,11 +125,13 @@ async def generate_narratives_from_history(
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
-        assistant_id,
+        "narratives_from_history_family",
         input=input,
         config=config,
         stream_mode="values"
     ):
-        if "narratives_from_history_family" in event:
-            narratives_from_history_family = event["narratives_from_history_family"]
-            yield narratives_from_history_world, narratives_from_history_country, narratives_from_history_city, narratives_from_history_family
+        if "grand_narratives" in event:
+            if len(event["grand_narratives"]) > 0:
+                # grand_narratives.extend(event["grand_narratives"])
+                grand_narratives = event["grand_narratives"]
+                yield pd.DataFrame(grand_narratives)

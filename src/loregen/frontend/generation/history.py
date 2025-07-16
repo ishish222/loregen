@@ -1,7 +1,7 @@
 import os
 import gradio as gr
 import pandas as pd
-from loregen.backend.common import model_default_name
+from loregen_common import model_default_name
 from langgraph_sdk import get_client
 from dotenv import load_dotenv, find_dotenv
 from loregen.frontend.common import get_secret
@@ -45,6 +45,9 @@ async def generate_history_world(
             "model": model_id
         }
     }
+
+    print(input)
+    print(config)
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],

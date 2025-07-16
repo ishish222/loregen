@@ -1,7 +1,7 @@
 import os
 import gradio as gr
 import pandas as pd
-from loregen.backend.common import model_default_name
+from loregen_common import model_default_name
 from langgraph_sdk import get_client
 from dotenv import load_dotenv, find_dotenv
 from loregen.frontend.common import get_secret
@@ -20,7 +20,7 @@ else:
     langchain_api_key = get_secret(langchain_secret_arn)
 
 
-async def generate_history_world(
+async def generate_character_sheet(
     final_conditions: str,
     number_of_epochs: int = 5,
     model_id: str = model_default_name
@@ -29,7 +29,7 @@ async def generate_history_world(
     if len(final_conditions) == 0:
         raise gr.Error("Please provide a final conditions for generating the world's history")
 
-    client = get_client(url=ENDPOINT_HISTORY, api_key=langchain_api_key)
+    client = get_client(url=ENDPOINT_CHARACTER, api_key=langchain_api_key)
 
     assistant_id = "history_world"
     new_thread = await client.threads.create()
