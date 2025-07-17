@@ -68,13 +68,7 @@ async def generate_narratives_from_history(
 
     input = {
         "history_world": history_world_dict,
-        "history_country": history_country_dict,
-        "history_city": history_city_dict,
-        "history_family": history_family_dict,
-        "number_of_narratives_from_world": number_of_narratives_from_world,
-        "number_of_narratives_from_country": number_of_narratives_from_country,
-        "number_of_narratives_from_city": number_of_narratives_from_city,
-        "number_of_narratives_from_family": number_of_narratives_from_family,
+        "number_of_grand_narratives": number_of_narratives_from_world,
     }
 
     async for namespace, event in client.runs.stream(
@@ -87,8 +81,14 @@ async def generate_narratives_from_history(
         if "world_grand_narratives" in event:
             if len(event["world_grand_narratives"]) > 0:
                 # grand_narratives.extend(event["grand_narratives"])
-                grand_narratives.extend(event["world_grand_narratives"])
+                narratives_from_history_world = event["world_grand_narratives"]
+                grand_narratives = narratives_from_history_world
                 yield pd.DataFrame(grand_narratives)
+
+    input = {
+        "history_country": history_country_dict,
+        "number_of_grand_narratives": number_of_narratives_from_country,
+    }
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
@@ -100,8 +100,14 @@ async def generate_narratives_from_history(
         if "country_grand_narratives" in event:
             if len(event["country_grand_narratives"]) > 0:
                 # grand_narratives.extend(event["grand_narratives"])
-                grand_narratives.extend(event["country_grand_narratives"])
+                narratives_from_history_country = event["country_grand_narratives"]
+                grand_narratives = narratives_from_history_world + narratives_from_history_country
                 yield pd.DataFrame(grand_narratives)
+
+    input = {
+        "history_city": history_city_dict,
+        "number_of_grand_narratives": number_of_narratives_from_city,
+    }
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
@@ -113,8 +119,14 @@ async def generate_narratives_from_history(
         if "city_grand_narratives" in event:
             if len(event["city_grand_narratives"]) > 0:
                 # grand_narratives.extend(event["grand_narratives"])
-                grand_narratives.extend(event["city_grand_narratives"])
+                narratives_from_history_city = event["city_grand_narratives"]
+                grand_narratives = narratives_from_history_world + narratives_from_history_country + narratives_from_history_city
                 yield pd.DataFrame(grand_narratives)
+
+    input = {
+        "history_family": history_family_dict,
+        "number_of_grand_narratives": number_of_narratives_from_family,
+    }
 
     async for namespace, event in client.runs.stream(
         new_thread["thread_id"],
@@ -126,5 +138,6 @@ async def generate_narratives_from_history(
         if "family_grand_narratives" in event:
             if len(event["family_grand_narratives"]) > 0:
                 # grand_narratives.extend(event["grand_narratives"])
-                grand_narratives.extend(event["family_grand_narratives"])
+                narratives_from_history_family = event["family_grand_narratives"]
+                grand_narratives = narratives_from_history_world + narratives_from_history_country + narratives_from_history_city + narratives_from_history_family
                 yield pd.DataFrame(grand_narratives)
