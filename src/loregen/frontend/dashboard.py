@@ -2,13 +2,10 @@ from __future__ import annotations
 
 import os
 import gradio as gr
-import pandas as pd
 from dotenv import load_dotenv, find_dotenv
 from loregen.frontend.state_manager import (
-    save_state,
-    load_state,
-    save_state_to_file,
-    load_state_from_file
+    save_state_handler,
+    load_state_handler
 )
 from loregen.frontend.generation.history import (
     generate_history_world,
@@ -26,8 +23,6 @@ from loregen.frontend.generation.character import (
     generate_family_systems_inheritance
 )
 from loregen_common import model_default_name, models
-import boto3
-import tempfile
 
 _ = load_dotenv(find_dotenv())
 
@@ -77,28 +72,58 @@ with gr.Blocks() as dashboard:
                 gh_button_family = gr.Button("Generate")
                 gh_output_history_family = gr.DataFrame(label="Family's history", wrap=True)
             with gr.TabItem("Grand narratives"):
-                gh_number_of_narratives_from_world = gr.Number(label="Number of narratives from world", value=2, maximum=10)
-                gh_number_of_narratives_from_country = gr.Number(label="Number of narratives from country", value=2, maximum=10)
-                gh_number_of_narratives_from_city = gr.Number(label="Number of narratives from city", value=2, maximum=10)
-                gh_number_of_narratives_from_family = gr.Number(label="Number of narratives from family", value=2, maximum=10)
+                gh_number_of_narratives_from_world = gr.Number(
+                    label="Number of narratives from world", value=2, maximum=10
+                )
+                gh_number_of_narratives_from_country = gr.Number(
+                    label="Number of narratives from country", value=2, maximum=10
+                )
+                gh_number_of_narratives_from_city = gr.Number(
+                    label="Number of narratives from city", value=2, maximum=10
+                )
+                gh_number_of_narratives_from_family = gr.Number(
+                    label="Number of narratives from family", value=2, maximum=10
+                )
                 gh_button_grand_narratives = gr.Button("Generate")
                 gh_output_grand_narratives = gr.DataFrame(label="Grand narratives", wrap=True)
             with gr.TabItem("Character sheet"):
-                gh_conditions_character_sheet = gr.Textbox(label="Character's final conditions")
-                gh_button_character_sheet = gr.Button("Generate")
+                with gr.Accordion("Final conditions", open=True):
+                    gh_conditions_character_sheet_name = gr.Textbox(label="Name")
+                    gh_conditions_character_sheet_final_conditions = gr.Textbox(label="Character's final conditions")
                 with gr.Accordion("Sex / sexuality", open=True):
                     with gr.Row():
                         gh_randomize_sex_sexuality_btn = gr.Button("Randomize")
                     with gr.Row():
                         with gr.Column():
                             # biological sex distribution: 49%, 49%, 2%
-                            gh_output_character_sheet_biological_sex = gr.Dropdown(["male", "female", "intersex"], value="male", label="Character's biological sex", interactive=True)
+                            gh_output_character_sheet_biological_sex = gr.Dropdown(
+                                ["male", "female", "intersex"],
+                                value="male",
+                                label="Character's biological sex",
+                                interactive=True,
+                            )
                         with gr.Column():
                             # biological sex / gender identity alignment: 97%, 3%
-                            gh_output_character_sheet_gender_identity = gr.Dropdown(["male", "female", "non-binary"], value="male", label="Character's gender identity", interactive=True)
+                            gh_output_character_sheet_gender_identity = gr.Dropdown(
+                                ["male", "female", "non-binary"],
+                                value="male",
+                                label="Character's gender identity",
+                                interactive=True,
+                            )
                         with gr.Column():
                             # sexuality distribution: 90%, 3%, 5%, 1%, 1%
-                            gh_output_character_sheet_sexuality = gr.Dropdown(["heterosexual", "homosexual", "bisexual", "pansexual", "asexual"], value="heterosexual", label="Character's sexuality", interactive=True)
+                            gh_output_character_sheet_sexuality = gr.Dropdown(
+                                [
+                                    "heterosexual",
+                                    "homosexual",
+                                    "bisexual",
+                                    "pansexual",
+                                    "asexual",
+                                ],
+                                value="heterosexual",
+                                label="Character's sexuality",
+                                interactive=True,
+                            )
                 with gr.Accordion("Hexaco traits", open=True):
                     # distribution of hexaco traints is assumed to be normal/Gaussian (mean 0, std 1)
                     with gr.Row():
@@ -251,42 +276,6 @@ with gr.Blocks() as dashboard:
             gh_output_character_sheet_hexaco_openness_to_experience]
         )
 
-    # Save/Load handlers
-    def save_state_handler(
-        world_conditions: str,
-        world_epochs: int,
-        world_df: pd.DataFrame,
-        country_conditions: str,
-        country_df: pd.DataFrame,
-        city_conditions: str,
-        city_df: pd.DataFrame,
-        family_conditions: str,
-        family_generations: int,
-        family_df: pd.DataFrame,
-        character_conditions: str,
-        character_chapters: int,
-        character_df: pd.DataFrame,
-    ) -> str:
-        state_json = save_state(
-            world_conditions,
-            world_epochs,
-            world_df,
-            country_conditions,
-            country_df,
-            city_conditions,
-            city_df,
-            family_conditions,
-            family_generations,
-            family_df,
-            character_conditions,
-            character_chapters,
-            character_df
-        )
-        # Save to a uniquely named temporary file
-        temp_file_obj = tempfile.NamedTemporaryFile(delete=False, prefix="loregen_", suffix=".save")
-        save_state_to_file(state_json, temp_file_obj.name)
-        return temp_file_obj.name
-
     save_btn.click(
         fn=save_state_handler,
         inputs=[
@@ -302,31 +291,28 @@ with gr.Blocks() as dashboard:
             gh_output_history_family,
             gh_conditions_character,
             gh_number_of_chapters,
-            gh_output_history_character
+            gh_output_history_character,
+            gh_conditions_character_sheet_name,
+            gh_conditions_character_sheet_final_conditions,
+            gh_output_character_sheet_biological_sex,
+            gh_output_character_sheet_gender_identity,
+            gh_output_character_sheet_sexuality,
+            gh_output_character_sheet_hexaco_honesty_humility,
+            gh_output_character_sheet_hexaco_emotionality,
+            gh_output_character_sheet_hexaco_extraversion,
+            gh_output_character_sheet_hexaco_agreeableness,
+            gh_output_character_sheet_hexaco_conscientiousness,
+            gh_output_character_sheet_hexaco_openness_to_experience,
+            gh_output_character_sheet_family_systems_inheritance,
+            gh_output_character_sheet_grand_narratives,
+            gh_output_character_sheet_pursued_identities,
+            gh_output_character_sheet_avoided_identities,
+            gh_output_character_sheet_values,
+            gh_output_character_sheet_behavioral_repertoire,
+            gh_output_character_sheet_language_and_vocabulary
         ],
         outputs=[save_file]
     )
-
-    def load_state_handler(file_obj):
-        if file_obj is None:
-            return None
-        state_json = load_state_from_file(file_obj.name)
-        state = load_state(state_json)
-        return [
-            state["world_conditions"],
-            state["world_epochs"],
-            state["world_df"],
-            state["country_conditions"],
-            state["country_df"],
-            state["city_conditions"],
-            state["city_df"],
-            state["family_conditions"],
-            state["family_generations"],
-            state["family_df"],
-            state["character_conditions"],
-            state["character_chapters"],
-            state["character_df"]
-        ]
 
     load_btn.click(
         fn=load_state_handler,
@@ -344,7 +330,25 @@ with gr.Blocks() as dashboard:
             gh_output_history_family,
             gh_conditions_character,
             gh_number_of_chapters,
-            gh_output_history_character
+            gh_output_history_character,
+            gh_conditions_character_sheet_name,
+            gh_conditions_character_sheet_final_conditions,
+            gh_output_character_sheet_biological_sex,
+            gh_output_character_sheet_gender_identity,
+            gh_output_character_sheet_sexuality,
+            gh_output_character_sheet_hexaco_honesty_humility,
+            gh_output_character_sheet_hexaco_emotionality,
+            gh_output_character_sheet_hexaco_extraversion,
+            gh_output_character_sheet_hexaco_agreeableness,
+            gh_output_character_sheet_hexaco_conscientiousness,
+            gh_output_character_sheet_hexaco_openness_to_experience,
+            gh_output_character_sheet_family_systems_inheritance,
+            gh_output_character_sheet_grand_narratives,
+            gh_output_character_sheet_pursued_identities,
+            gh_output_character_sheet_avoided_identities,
+            gh_output_character_sheet_values,
+            gh_output_character_sheet_behavioral_repertoire,
+            gh_output_character_sheet_language_and_vocabulary,
         ]
     )
 
