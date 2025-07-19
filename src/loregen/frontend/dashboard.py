@@ -7,6 +7,7 @@ from loregen.frontend.state_manager import (
     save_state_handler,
     load_state_handler
 )
+from loregen.frontend.generation.dialogue import generate_response
 from loregen.frontend.generation.history import (
     generate_history_world,
     generate_history_country,
@@ -178,6 +179,16 @@ with gr.Blocks() as dashboard:
                 gh_button_character = gr.Button("Generate")
                 gh_output_history_character = gr.DataFrame(label="Character's history", wrap=True)
 
+            with gr.TabItem("Character dialogue"):
+                with gr.Accordion("Character's internal dialogue", open=False):
+                    gh_internal_dialogue_chat = gr.Chatbot(label="Character's internal dialogue", type="messages")
+                with gr.Row():
+                    gh_external_dialogue_chat = gr.Chatbot(label="Character's external dialogue", type="messages")
+                with gr.Row():
+                    gh_external_dialogue_input = gr.Textbox(label="Say something", type="text")
+                with gr.Row():
+                    gh_external_dialogue_send = gr.Button("Send")
+
     with gr.Row():
         with gr.Column():
             save_btn = gr.Button("Save State")
@@ -275,6 +286,12 @@ with gr.Blocks() as dashboard:
             gh_output_character_sheet_hexaco_conscientiousness,
             gh_output_character_sheet_hexaco_openness_to_experience]
         )
+
+    gh_external_dialogue_send.click(
+        fn=generate_response,
+        inputs=[gh_external_dialogue_chat, gh_external_dialogue_input, model_choice],
+        outputs=[gh_external_dialogue_chat, gh_external_dialogue_input]
+    )
 
     save_btn.click(
         fn=save_state_handler,
